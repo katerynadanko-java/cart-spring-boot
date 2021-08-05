@@ -6,11 +6,13 @@ import com.kate.cartspringboot.service.CartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,16 +28,23 @@ public class CartController {
     @Autowired
     CartService cartService;
 
+    @Transactional
     @PostMapping("create")
-    public ResponseEntity<Cart> createCart(Long customerId) throws IOException {
+    public ResponseEntity<Cart> createCart(@RequestBody Long customerId) throws IOException {
         log.debug("Star to add cart with customerId ", customerId);
         return ResponseEntity.ok(cartService.createCart(customerId));
     }
 
-    @GetMapping("get")
-    public ResponseEntity<List<Cart>> getAllCarts(Long customerId) throws IOException {
-        log.debug("Star to find cart with customerId ", customerId);
+    @GetMapping("getByCustomerId")
+    public ResponseEntity<List<Cart>> getCartsByCustomerId(@PathVariable Long customerId) throws IOException {
+        log.debug("Star to find carts with customerId ", customerId);
         return ResponseEntity.ok(cartService.getAllCartsByCustomerId(customerId));
+    }
+
+    @GetMapping("get")
+    public ResponseEntity<List<Cart>> getAllCarts() {
+        log.debug("Star to find carts");
+        return ResponseEntity.ok(cartService.getAllCarts());
     }
 
     @PutMapping("/{cartId}/add/product")

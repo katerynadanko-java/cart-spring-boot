@@ -12,6 +12,8 @@ public interface CartService {
 
     List<Cart> getAllCartsByCustomerId(Long customerId) throws IOException;
 
+    List<Cart> getAllCarts();
+
     Cart addProductToCart(Long cartId, Long productId, Integer amount) throws IOException;
 
     Cart deleteProductFromCart(Long cartId, Long productId) throws IOException;

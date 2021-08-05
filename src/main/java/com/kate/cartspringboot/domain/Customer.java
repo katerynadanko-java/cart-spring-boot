@@ -22,9 +22,11 @@ import java.util.List;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "customer_id")
     private Long id;
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "surname", nullable = false)
     private String surname;
     @Column(name = "phone", nullable = false, unique = true)
     private String phone;
@@ -46,6 +48,7 @@ public class Customer {
                 ", surname='" + surname + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
+                ", carts=" + carts +
                 '}';
     }
 }

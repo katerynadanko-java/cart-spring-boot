@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface CustomerService {
-    void createCustomer(Customer customer) throws IOException;
+    void createCustomer(Customer customer);
 
     List<Customer> getAllCustomers();
 

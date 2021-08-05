@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ public class ProductController {
         return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
 
+    @Transactional
     @PostMapping(value = "/create")
     public String createProduct(@RequestBody Product product) throws IOException {
         log.debug("Start to create product ", product);
@@ -42,8 +44,8 @@ public class ProductController {
         return createProduct;
     }
 
-    @PutMapping("update/{id}")
-    public ResponseEntity<Product> update(@PathVariable Long productId, BigDecimal cost) throws IOException {
+    @PutMapping("update/{id}/{cost}")
+    public ResponseEntity<Product> update(@PathVariable Long productId, @PathVariable BigDecimal cost) throws IOException {
         log.debug("Start to update product with id ", productId);
         return ResponseEntity.ok(productService.updatePrice(productId, cost));
     }

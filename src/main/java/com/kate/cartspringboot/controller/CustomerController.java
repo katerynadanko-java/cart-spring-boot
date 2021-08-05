@@ -5,10 +5,13 @@ import com.kate.cartspringboot.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,15 +25,16 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
-    @PutMapping("create")
-    public ResponseEntity<Customer> createCustomer(@PathVariable Customer customer) throws IOException {
+    @Transactional
+    @PostMapping("create")
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) throws IOException {
         log.debug("Star to add customer", customer);
         customerService.createCustomer(customer);
         return ResponseEntity.ok(customer);
     }
 
     @GetMapping("get")
-    public ResponseEntity<List<Customer>> getAll(@PathVariable Customer customer) throws IOException {
+    public ResponseEntity<List<Customer>> getAll() {
         log.debug("Star to find customers");
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
@@ -42,7 +46,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("delete/{id}")
-    public String delete(@PathVariable Long customerId) throws IOException {
+    public String delete(@PathVariable Long customerId) {
         log.debug("Star to delete customer with id", customerId);
         String deletedCustomer = customerService.deleteCustomer(customerId);
         return deletedCustomer;

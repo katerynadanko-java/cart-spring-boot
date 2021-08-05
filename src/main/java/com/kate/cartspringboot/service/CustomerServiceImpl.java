@@ -16,24 +16,8 @@ public class CustomerServiceImpl implements CustomerService {
     List<Customer> customers;
 
     @Override
-    public void createCustomer(Customer customer) throws IOException {
-        if (customer.getPhone().isEmpty())
-            throw new IOException("Required parameters: customerPhone");
-        if (customer.getEmail().isEmpty())
-            throw new IOException("Required parameters: customerEmail");
-        for (Customer c : customers) {
-            if (customerRepository.findCustomerByPhone(customer.getPhone()).equals(c.getPhone())) {
-                throw new IOException("Customer with phone " + c.getPhone() + " already exist");
-            }
-        }
-        for (Customer c : customers) {
-            if (customerRepository.findCustomerByEmail(customer.getEmail()).equals(c.getEmail())) {
-                throw new IOException("Customer with email " + c.getEmail() + " already exist");
-            }
-        }
-        if (!customer.getEmail().matches("[@]{1}\\.+")) {
-            throw new IOException("Wrong value for email");
-        }
+    public void createCustomer(Customer customer) {
+        if(customer != null)
         customerRepository.save(customer);
     }
 

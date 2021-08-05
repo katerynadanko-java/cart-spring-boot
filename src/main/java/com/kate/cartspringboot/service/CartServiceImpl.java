@@ -44,11 +44,15 @@ public class CartServiceImpl implements CartService {
         cartRepository.save(cart);
         return cart;
     }
+@Override
+    public List<Cart> getAllCarts(){
+    return cartRepository.findAll();
+    }
 
     @Override
-    public List<Cart> getAllCartsByCustomerId(Long customerId) {
+    public List<Cart> getAllCartsByCustomerId(Long customerId) throws IOException {
         if (customerId == null) {
-            return cartRepository.findAll();
+            throw new IOException("No such customer with id");
         }
         return cartRepository.findAllCartsByCustomerId(customerId);
     }
