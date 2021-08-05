@@ -24,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String createProduct(Product product) throws IOException {
+    public String createProduct(Product product) {
         String id = String.valueOf(productRepository.save(product).getId());
         return id;
     }
@@ -38,9 +38,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product updatePrice(Long productId, BigDecimal cost) throws IOException {
         Optional<Product> productRepositoryById = productRepository.findById(productId);
-        if (!productRepositoryById.isPresent()) {
-            throw new IOException("There is no product with id " + productId);
-        }
         if (cost.compareTo(new BigDecimal(0)) < 0) {
             throw new IOException("Product should not cost less then 0");
         }

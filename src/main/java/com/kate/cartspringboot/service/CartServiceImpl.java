@@ -87,9 +87,6 @@ public class CartServiceImpl implements CartService {
         if (!cartRepository.existsById(cartId)) {
             throw new IOException("Cart with id " + cartId + " does not exists");
         }
-        if (!productRepository.existsById(productId)) {
-            throw new IOException("Product with id " + productId + " does not exists");
-        }
         if (productId == null) {
             throw new IOException("Required parameters: productId");
         }
@@ -104,10 +101,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public String deleteCartById(Long cartId) throws IOException {
-        if (!cartRepository.existsById(cartId)) {
-            throw new IOException("Cart with id " + cartId + " does not exists");
-        }
+    public String deleteCartById(Long cartId) {
         cartRepository.deleteById(cartId);
         return "Cart with id " + cartId + " deleted successfully";
     }

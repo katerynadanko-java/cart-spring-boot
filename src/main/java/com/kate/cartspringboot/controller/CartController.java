@@ -36,7 +36,7 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    @GetMapping("getByCustomerId")
+    @GetMapping("getByCustomerId/{customerId}")
     public ResponseEntity<List<Cart>> getCartsByCustomerId(@PathVariable Long customerId) throws IOException {
         log.debug("Start to find carts with customerId ", customerId);
         return ResponseEntity.ok(cartService.getAllCartsByCustomerId(customerId));

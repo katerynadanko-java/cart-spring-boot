@@ -45,13 +45,13 @@ public class ProductController {
     }
 
     @PutMapping("update/{productId}/{cost}")
-    public ResponseEntity<Product> update(@PathVariable Long productId, @PathVariable BigDecimal cost) throws IOException {
+    public ResponseEntity <Product> update(@PathVariable Long productId, @PathVariable BigDecimal cost) throws IOException {
         log.debug("Start to update product with id ", productId);
         return ResponseEntity.ok(productService.updatePrice(productId, cost));
     }
 
     @GetMapping("get")
-    private ResponseEntity<List<Product>> getAll() {
+    private ResponseEntity <List<Product>> getAll() {
         log.debug("Start to find products");
         return ResponseEntity.ok(productService.findAllProducts());
     }
@@ -60,7 +60,7 @@ public class ProductController {
     public String delete(@PathVariable Long productId) {
         log.debug("Start to delete product with id ", productId);
         ResponseEntity.ok(productService.deleteById(productId));
-        return String.valueOf(productId);
+        return "Product with id " + String.valueOf(productId) + " deleted successfully";
     }
 
     @GetMapping(value = "/findByCost/{cost}")

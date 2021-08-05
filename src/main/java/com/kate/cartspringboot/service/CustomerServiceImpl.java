@@ -55,6 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> findByPhone(String phone) throws IOException {
+
         if (phone == null && phone.isEmpty()) {
             throw new IOException("Required parameters: customerPhone");
         }
