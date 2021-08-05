@@ -37,44 +37,44 @@ public class CartController {
 
     @GetMapping("getByCustomerId")
     public ResponseEntity<List<Cart>> getCartsByCustomerId(@PathVariable Long customerId) throws IOException {
-        log.debug("Star to find carts with customerId ", customerId);
+        log.debug("Start to find carts with customerId ", customerId);
         return ResponseEntity.ok(cartService.getAllCartsByCustomerId(customerId));
     }
 
     @GetMapping("get")
     public ResponseEntity<List<Cart>> getAllCarts() {
-        log.debug("Star to find carts");
+        log.debug("Start to find carts");
         return ResponseEntity.ok(cartService.getAllCarts());
     }
 
-    @PutMapping("/{cartId}/add/product")
-    public ResponseEntity<Cart> addProductToCart(@PathVariable Long cartId, Long productId, Integer amount) throws IOException {
-        log.debug("Star to add product with id ", productId, "to cart with id", cartId);
+    @PutMapping("/{cartId}/add/product/{productId}/{amount}")
+    public ResponseEntity<Cart> addProductToCart(@PathVariable Long cartId, @PathVariable Long productId, @PathVariable Integer amount) throws IOException {
+        log.debug("Start to add product with id ", productId, "to cart with id", cartId);
         return ResponseEntity.ok(cartService.addProductToCart(cartId, productId, amount));
     }
 
-    @DeleteMapping("/{cartId}/delete/product")
-    public ResponseEntity<Cart> deleteProductToCart(@PathVariable Long cartId, Long productId) throws IOException {
-        log.debug("Star to delete product with id ", productId);
+    @DeleteMapping("/{cartId}/delete/product/{productId}")
+    public ResponseEntity<Cart> deleteProductToCart(@PathVariable Long cartId, @PathVariable Long productId) throws IOException {
+        log.debug("Start to delete product with id ", productId);
         return ResponseEntity.ok(cartService.deleteProductFromCart(cartId, productId));
     }
 
     @DeleteMapping("/delete/{cartId}")
     public String deleteCart(@PathVariable Long cartId) throws IOException {
-        log.debug("Star to delete cart with id ", cartId);
+        log.debug("Start to delete cart with id ", cartId);
         String deletedCart = cartService.deleteCartById(cartId);
         return deletedCart;
     }
 
-    @GetMapping("/{cartId}/getPremium")
-    public ResponseEntity<List<Cart>> getPremiumCart(@PathVariable BigDecimal sum) throws IOException {
-        log.debug("Star to find premiumCarts with sum ", sum);
+    @GetMapping("/{cartId}/getPremium/{sum}")
+    public ResponseEntity<List<Cart>> getPremiumCart(@PathVariable BigDecimal sum) {
+        log.debug("Start to find premiumCarts with sum ", sum);
         return ResponseEntity.ok(cartService.getAllPremiumCarts(sum));
     }
 
     @PutMapping("/update/{cartId}")
     public ResponseEntity<Cart> updateCart(@PathVariable List<ProductAddedInCart> products, Long cartId) throws IOException {
-        log.debug("Star to update cart with id ", cartId);
+        log.debug("Start to update cart with id ", cartId);
         return ResponseEntity.ok(cartService.updateCart(products, cartId));
     }
 }

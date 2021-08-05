@@ -44,7 +44,7 @@ public class ProductController {
         return createProduct;
     }
 
-    @PutMapping("update/{id}/{cost}")
+    @PutMapping("update/{productId}/{cost}")
     public ResponseEntity<Product> update(@PathVariable Long productId, @PathVariable BigDecimal cost) throws IOException {
         log.debug("Start to update product with id ", productId);
         return ResponseEntity.ok(productService.updatePrice(productId, cost));
@@ -56,7 +56,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.findAllProducts());
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("delete/{productId}")
     public String delete(@PathVariable Long productId) {
         log.debug("Start to delete product with id ", productId);
         ResponseEntity.ok(productService.deleteById(productId));

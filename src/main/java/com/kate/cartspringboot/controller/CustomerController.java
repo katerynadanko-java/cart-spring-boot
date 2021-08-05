@@ -28,39 +28,39 @@ public class CustomerController {
     @Transactional
     @PostMapping("create")
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) throws IOException {
-        log.debug("Star to add customer", customer);
+        log.debug("Start to add customer", customer);
         customerService.createCustomer(customer);
         return ResponseEntity.ok(customer);
     }
 
     @GetMapping("get")
     public ResponseEntity<List<Customer>> getAll() {
-        log.debug("Star to find customers");
+        log.debug("Start to find customers");
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
-    @PutMapping("update")
+    @PutMapping("update/{customerId}")
     public ResponseEntity<Customer> update(@PathVariable Long customerId, String name, String surname) throws IOException {
-        log.debug("Star to update customer with id", customerId);
+        log.debug("Start to update customer with id", customerId);
         return ResponseEntity.ok(customerService.updateCustomer(customerId, name, surname));
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("delete/{customerId}")
     public String delete(@PathVariable Long customerId) {
-        log.debug("Star to delete customer with id", customerId);
+        log.debug("Start to delete customer with id", customerId);
         String deletedCustomer = customerService.deleteCustomer(customerId);
         return deletedCustomer;
     }
 
     @GetMapping("getByPhone/{phone}")
     public ResponseEntity<List<Customer>> findByPhone(@PathVariable String phone) throws IOException {
-        log.debug("Star to find customer with phone", phone);
+        log.debug("Start to find customer with phone", phone);
         return ResponseEntity.ok(customerService.findByPhone(phone));
     }
 
     @GetMapping("getByEmail/{email}")
     public ResponseEntity<List<Customer>> findByEmail(@PathVariable String email) throws IOException {
-        log.debug("Star to find customer with email", email);
+        log.debug("Start to find customer with email", email);
         return ResponseEntity.ok(customerService.findByEmail(email));
     }
 }
