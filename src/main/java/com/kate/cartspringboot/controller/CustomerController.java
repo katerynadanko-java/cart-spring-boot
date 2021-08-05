@@ -27,7 +27,7 @@ public class CustomerController {
 
     @Transactional
     @PostMapping("create")
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) throws IOException {
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
         log.debug("Start to add customer", customer);
         customerService.createCustomer(customer);
         return ResponseEntity.ok(customer);

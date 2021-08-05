@@ -29,10 +29,11 @@ public class CartController {
     CartService cartService;
 
     @Transactional
-    @PostMapping("create")
-    public ResponseEntity<Cart> createCart(@RequestBody Long customerId) throws IOException {
+    @PostMapping("create/{customerId}")
+    public ResponseEntity<Cart> createCart(@PathVariable Long customerId) throws IOException {
         log.debug("Star to add cart with customerId ", customerId);
-        return ResponseEntity.ok(cartService.createCart(customerId));
+        Cart cart = cartService.createCart(customerId);
+        return ResponseEntity.ok(cart);
     }
 
     @GetMapping("getByCustomerId")

@@ -34,9 +34,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart createCart(Long customerId) throws IOException {
-        if (!cartRepository.existsById(customerId)) {
-            throw new IOException("There is no customer with id " + customerId);
-        }
+
         Cart cart = new Cart();
         cart.setCustomerId(customerId);
         Customer customer = customerRepository.getById(customerId);
