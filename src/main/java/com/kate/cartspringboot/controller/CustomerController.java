@@ -39,8 +39,8 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
-    @PutMapping("update/{customerId}")
-    public ResponseEntity<Customer> update(@PathVariable Long customerId, String name, String surname) throws IOException {
+    @PutMapping("update/{customerId}/{name}/{surname}")
+    public ResponseEntity<Customer> update(@PathVariable Long customerId, @PathVariable String name, @PathVariable String surname) throws IOException {
         log.debug("Start to update customer with id", customerId);
         return ResponseEntity.ok(customerService.updateCustomer(customerId, name, surname));
     }

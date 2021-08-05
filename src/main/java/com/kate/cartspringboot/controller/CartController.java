@@ -66,14 +66,14 @@ public class CartController {
         return deletedCart;
     }
 
-    @GetMapping("/{cartId}/getPremium/{sum}")
+    @GetMapping("/getPremium/{sum}")
     public ResponseEntity<List<Cart>> getPremiumCart(@PathVariable BigDecimal sum) {
         log.debug("Start to find premiumCarts with sum ", sum);
         return ResponseEntity.ok(cartService.getAllPremiumCarts(sum));
     }
 
     @PutMapping("/update/{cartId}")
-    public ResponseEntity<Cart> updateCart(@PathVariable List<ProductAddedInCart> products, Long cartId) throws IOException {
+    public ResponseEntity<Cart> updateCart( List<ProductAddedInCart> products, @PathVariable Long cartId) throws IOException {
         log.debug("Start to update cart with id ", cartId);
         return ResponseEntity.ok(cartService.updateCart(products, cartId));
     }
