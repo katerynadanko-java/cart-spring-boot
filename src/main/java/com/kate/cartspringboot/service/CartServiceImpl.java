@@ -33,12 +33,9 @@ public class CartServiceImpl implements CartService {
     private List<Cart> carts;
 
     @Override
-    public Cart createCart(Long customerId) throws IOException {
+    public Cart createCart(Long customerId) {
 
-        Cart cart = new Cart();
-        cart.setCustomerId(customerId);
-        Customer customer = customerRepository.getById(customerId);
-        customer.addCart(cart);
+        Cart cart = new Cart(customerRepository.getById(customerId));
         cartRepository.save(cart);
         return cart;
     }

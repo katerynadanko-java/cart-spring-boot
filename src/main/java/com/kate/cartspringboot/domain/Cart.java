@@ -3,6 +3,7 @@ package com.kate.cartspringboot.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -10,10 +11,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -30,6 +33,8 @@ public class Cart {
     @ElementCollection
     private List<ProductAddedInCart> productsAddedInCart;
     private BigDecimal sum;
+    @ManyToOne
+    private Customer customer;
 
     public BigDecimal countSum() {
         sum = BigDecimal.ZERO;
@@ -37,6 +42,10 @@ public class Cart {
             sum = sum.add(p.getProduct().getCost().multiply(BigDecimal.valueOf(p.getAmount())));
         }
         return sum;
+    }
+
+    public Cart(Customer customer) {
+        this.customer = customer;
     }
 
     public void addProductToCart(ProductAddedInCart productAddedInCart) {
