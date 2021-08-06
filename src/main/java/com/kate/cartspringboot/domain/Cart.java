@@ -44,9 +44,6 @@ public class Cart {
         return sum;
     }
 
-    public Cart(Customer customer) {
-        this.customer = customer;
-    }
 
     public void addProductToCart(ProductAddedInCart productAddedInCart) {
         if (productAddedInCart == null) {

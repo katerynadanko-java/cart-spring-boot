@@ -33,11 +33,19 @@ public class CartServiceImpl implements CartService {
     private List<Cart> carts;
 
     @Override
-    public Cart createCart(Long customerId) {
+    public Cart createCart(Long customerId) throws IOException {
 
-        Cart cart = new Cart(customerRepository.getById(customerId));
+        if (!customerRepository.existsById(customerId)) {
+            throw new IOException("Person with id " + customerId + " does not exists.");
+        }
+        Cart cart = new Cart();
+        cart.setCustomerId(customerId);
+        Customer customer = customerRepository.getById(customerId);
+        customer.addCart(cart);
         cartRepository.save(cart);
+        customerRepository.save(customer);
         return cart;
+
     }
 @Override
     public List<Cart> getAllCarts(){
@@ -111,18 +119,6 @@ public class CartServiceImpl implements CartService {
             }
         }
         return cartRepository.findAllCartsBySum(sum);
-    }
-
-    @Override
-    public Cart updateCart(List<ProductAddedInCart> products, Long cartId) throws IOException {
-        Optional<Cart> cartRepositoryById = cartRepository.findById(cartId);
-        if (products == null && products.isEmpty()) {
-            throw new IOException("There are no selected products");
-        }
-        if (!cartRepository.getById(cartId).getProductsAddedInCart().equals(products)) {
-            cartRepositoryById.get().setProductsAddedInCart(products);
-        }
-        return cartRepositoryById.get();
     }
 
 }

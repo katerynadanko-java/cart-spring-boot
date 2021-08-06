@@ -1,7 +1,6 @@
 package com.kate.cartspringboot.service;
 
 import com.kate.cartspringboot.domain.Cart;
-import com.kate.cartspringboot.domain.ProductAddedInCart;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -21,7 +20,4 @@ public interface CartService {
     String deleteCartById(Long cartId) throws IOException;
 
     List<Cart> getAllPremiumCarts(BigDecimal sum);
-
-    Cart updateCart(List<ProductAddedInCart> products, Long cartId) throws IOException;
-
 }

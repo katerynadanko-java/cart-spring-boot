@@ -32,8 +32,7 @@ public class CartController {
     @PostMapping("create/{customerId}")
     public ResponseEntity<Cart> createCart(@PathVariable Long customerId) throws IOException {
         log.debug("Star to add cart with customerId ", customerId);
-        Cart cart = cartService.createCart(customerId);
-        return ResponseEntity.ok(cart);
+        return ResponseEntity.ok(cartService.createCart(customerId));
     }
 
     @GetMapping("getByCustomerId/{customerId}")
@@ -71,11 +70,5 @@ public class CartController {
     public ResponseEntity<List<Cart>> getPremiumCart(@PathVariable BigDecimal sum) {
         log.debug("Start to find premiumCarts with sum ", sum);
         return ResponseEntity.ok(cartService.getAllPremiumCarts(sum));
-    }
-
-    @PutMapping("/update/{cartId}")
-    public ResponseEntity<Cart> updateCart( List<ProductAddedInCart> products, @PathVariable Long cartId) throws IOException {
-        log.debug("Start to update cart with id ", cartId);
-        return ResponseEntity.ok(cartService.updateCart(products, cartId));
     }
 }
