@@ -15,12 +15,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
-    List<Product> products;
 
     @Override
     public Product findById(Long id) {
         Optional<Product> product = productRepository.findById(id);
         return product.get();
+    }
+    @Override
+    public List<Product> getAll() {
+        return productRepository.findAll();
     }
 
     @Override
@@ -43,11 +46,6 @@ public class ProductServiceImpl implements ProductService {
         }
         productRepositoryById.get().setCost(cost);
         return productRepositoryById.get();
-    }
-
-    @Override
-    public List<Product> findAllProducts() {
-        return productRepository.findAll();
     }
 
     @Override

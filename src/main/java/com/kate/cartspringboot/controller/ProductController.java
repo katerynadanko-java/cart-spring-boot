@@ -1,5 +1,6 @@
 package com.kate.cartspringboot.controller;
 
+import com.kate.cartspringboot.domain.Customer;
 import com.kate.cartspringboot.domain.Product;
 import com.kate.cartspringboot.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -51,9 +52,8 @@ public class ProductController {
     }
 
     @GetMapping("get")
-    private ResponseEntity <List<Product>> getAll() {
-        log.debug("Start to find products");
-        return ResponseEntity.ok(productService.findAllProducts());
+    public ResponseEntity <List<Product>> getAll() {
+        return ResponseEntity.ok(productService.getAll());
     }
 
     @DeleteMapping("delete/{productId}")
