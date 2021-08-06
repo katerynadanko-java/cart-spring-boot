@@ -19,5 +19,5 @@ public interface CartService {
 
     String deleteCartById(Long cartId) throws IOException;
 
-    List<Cart> getAllPremiumCarts(BigDecimal sum);
+    List<Cart> getAllCartsBySum(BigDecimal sum);
 }

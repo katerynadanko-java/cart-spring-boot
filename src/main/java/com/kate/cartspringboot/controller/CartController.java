@@ -1,7 +1,6 @@
 package com.kate.cartspringboot.controller;
 
 import com.kate.cartspringboot.domain.Cart;
-import com.kate.cartspringboot.domain.ProductAddedInCart;
 import com.kate.cartspringboot.service.CartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -69,6 +67,6 @@ public class CartController {
     @GetMapping("/getPremium/{sum}")
     public ResponseEntity<List<Cart>> getPremiumCart(@PathVariable BigDecimal sum) {
         log.debug("Start to find premiumCarts with sum ", sum);
-        return ResponseEntity.ok(cartService.getAllPremiumCarts(sum));
+        return ResponseEntity.ok(cartService.getAllCartsBySum(sum));
     }
 }

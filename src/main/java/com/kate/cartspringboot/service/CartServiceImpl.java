@@ -81,10 +81,10 @@ public class CartServiceImpl implements CartService {
         productAddedInCart.setAmount(amount);
         productAddedInCartRepository.save(productAddedInCart);
 
-        Optional<Cart> cartRepositoryById = cartRepository.findById(cartId);
-        cartRepositoryById.get().addProductToCart(productAddedInCart);
-        cartRepository.saveAndFlush(cartRepositoryById.get());
-        return cartRepositoryById.get();
+        Optional<Cart> cartOptional = cartRepository.findById(cartId);
+        cartOptional.get().addProductToCart(productAddedInCart);
+        cartRepository.saveAndFlush(cartOptional.get());
+        return cartOptional.get();
     }
 
     @Override
@@ -112,7 +112,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<Cart> getAllPremiumCarts(BigDecimal sum) {
+    public List<Cart> getAllCartsBySum(BigDecimal sum) {
         for (Cart c : carts) {
             if (c.countSum().compareTo(sum) < 0) {
                 return null;
