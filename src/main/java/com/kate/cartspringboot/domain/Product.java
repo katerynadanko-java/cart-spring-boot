@@ -6,11 +6,14 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -28,8 +31,11 @@ public class Product {
     private String name;
     @Column(name = "description")
     private String description;
-    @Column(name = "cost")
-    private BigDecimal cost;
+    @Column(name = "price")
+    private BigDecimal price;
+
+//    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+//    private List<Order> orders;
 
     @Override
     public boolean equals(Object o) {
@@ -39,12 +45,12 @@ public class Product {
         return Objects.equals(id, product.id) &&
                 Objects.equals(name, product.name) &&
                 Objects.equals(description, product.description) &&
-                Objects.equals(cost, product.cost);
+                Objects.equals(price, product.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, cost);
+        return Objects.hash(id, name, description, price);
     }
 
     @Override
@@ -53,7 +59,7 @@ public class Product {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", cost=" + cost +
+                ", price=" + price +
                 '}';
     }
 }

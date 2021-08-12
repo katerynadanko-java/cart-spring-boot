@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -33,11 +32,11 @@ public class CartController {
         return ResponseEntity.ok(cartService.createCart(customerId));
     }
 
-    @GetMapping("getByCustomerId/{customerId}")
-    public ResponseEntity<List<Cart>> getCartsByCustomerId(@PathVariable Long customerId) throws IOException {
-        log.debug("Start to find carts with customerId ", customerId);
-        return ResponseEntity.ok(cartService.getAllCartsByCustomerId(customerId));
-    }
+//    @GetMapping("getByCustomerId/{customerId}")
+//    public ResponseEntity<List<Cart>> getCartsByCustomerId(@PathVariable Long customerId) throws IOException {
+//        log.debug("Start to find carts with customerId ", customerId);
+//        return ResponseEntity.ok(cartService.getAllCartsByCustomerId(customerId));
+//    }
 
     @GetMapping("get")
     public ResponseEntity<List<Cart>> getAllCarts() {
@@ -47,14 +46,14 @@ public class CartController {
 
     @PutMapping("/{cartId}/add/product/{productId}/{amount}")
     public ResponseEntity<Cart> addProductToCart(@PathVariable Long cartId, @PathVariable Long productId, @PathVariable Integer amount) throws IOException {
-        log.debug("Start to add product with id ", productId, "to cart with id", cartId);
-        return ResponseEntity.ok(cartService.addProductToCart(cartId, productId, amount));
+        log.debug("Start to add product with id ", productId, "to customer with id", cartId);
+        return ResponseEntity.ok(cartService.addOrderToCart(cartId, productId, amount));
     }
 
     @DeleteMapping("/{cartId}/delete/product/{productId}")
     public ResponseEntity<Cart> deleteProductToCart(@PathVariable Long cartId, @PathVariable Long productId) throws IOException {
         log.debug("Start to delete product with id ", productId);
-        return ResponseEntity.ok(cartService.deleteProductFromCart(cartId, productId));
+        return ResponseEntity.ok(cartService.deleteOrderFromCart(cartId, productId));
     }
 
     @DeleteMapping("/delete/{cartId}")
@@ -64,9 +63,9 @@ public class CartController {
         return deletedCart;
     }
 
-    @GetMapping("/getPremium/{sum}")
-    public ResponseEntity<List<Cart>> getPremiumCart(@PathVariable BigDecimal sum) {
-        log.debug("Start to find premiumCarts with sum ", sum);
-        return ResponseEntity.ok(cartService.getAllCartsBySum(sum));
-    }
+//    @GetMapping("/getPremium/{sum}")
+//    public ResponseEntity<List<Cart>> getPremiumCart(@PathVariable BigDecimal sum) {
+//        log.debug("Start to find premiumCarts with sum ", sum);
+//        return ResponseEntity.ok(cartService.getAllCartsBySum(sum));
+//    }
 }

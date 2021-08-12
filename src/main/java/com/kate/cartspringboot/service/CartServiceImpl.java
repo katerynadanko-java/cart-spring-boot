@@ -2,10 +2,11 @@ package com.kate.cartspringboot.service;
 
 import com.kate.cartspringboot.domain.Cart;
 import com.kate.cartspringboot.domain.Customer;
-import com.kate.cartspringboot.domain.ProductAddedInCart;
+import com.kate.cartspringboot.domain.Order;
+import com.kate.cartspringboot.domain.Product;
 import com.kate.cartspringboot.repository.CartRepository;
 import com.kate.cartspringboot.repository.CustomerRepository;
-import com.kate.cartspringboot.repository.ProductAddedInCartRepository;
+import com.kate.cartspringboot.repository.OrderRepository;
 import com.kate.cartspringboot.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -28,9 +30,9 @@ public class CartServiceImpl implements CartService {
     private ProductRepository productRepository;
 
     @Autowired
-    private ProductAddedInCartRepository productAddedInCartRepository;
+    private OrderRepository orderRepository;
 
-    private List<Cart> carts;
+    private Cart cart;
 
     @Override
     public Cart createCart(Long customerId) throws IOException {
@@ -39,56 +41,71 @@ public class CartServiceImpl implements CartService {
             throw new IOException("Person with id " + customerId + " does not exists.");
         }
         Cart cart = new Cart();
-        cart.setCustomerId(customerId);
-        Customer customer = customerRepository.getById(customerId);
-        customer.addCart(cart);
-        cartRepository.save(cart);
+        Cart savedCart = cartRepository.save(cart);
+        Optional<Customer> customerOptional = customerRepository.findById(customerId);
+        Customer customer = customerOptional.get();
+        customer.setCart(savedCart);
         customerRepository.save(customer);
         return cart;
-
-    }
-@Override
-    public List<Cart> getAllCarts(){
-    return cartRepository.findAll();
     }
 
     @Override
-    public List<Cart> getAllCartsByCustomerId(Long customerId) throws IOException {
-        if (customerId == null) {
-            throw new IOException("No such customer with id");
-        }
-        return cartRepository.findAllCartsByCustomerId(customerId);
+    public List<Cart> getAllCarts() {
+        return cartRepository.findAll();
     }
 
+
     @Override
-    public Cart addProductToCart(Long cartId, Long productId, Integer amount) throws IOException {
+    public Cart addOrderToCart(Long cartId, Long productId, Integer amount) throws IOException {
 
-        if (!cartRepository.existsById(cartId)) {
-            throw new IOException("Cart with id " + cartId + " does not exists");
-        }
-        if (productId == null || amount == null) {
-            throw new IOException("Required parameters: productId, quantity");
-        }
-        if (!productRepository.existsById(productId)) {
-            throw new IOException("Product with id " + productId + " does not exists");
-        }
-        if (amount < 1) {
-            throw new IOException("Amount of products should be more than 1!");
-        }
+//        if (!cartRepository.existsById(cartId)) {
+//            throw new IOException("Cart with id " + cartId + " does not exists");
+//        }
+//        if (productId == null || amount == null) {
+//            throw new IOException("Required parameters: productId, quantity");
+//        }
+//        if (!productRepository.existsById(productId)) {
+//            throw new IOException("Product with id " + productId + " does not exists");
+//        }
+//        if (amount < 1) {
+//            throw new IOException("Amount of products should be more than 1!");
+//        }
 
-        ProductAddedInCart productAddedInCart = new ProductAddedInCart();
-        productAddedInCart.setProduct(productRepository.getById(productId));
-        productAddedInCart.setAmount(amount);
-        productAddedInCartRepository.save(productAddedInCart);
-
-        Optional<Cart> cartOptional = cartRepository.findById(cartId);
-        cartOptional.get().addProductToCart(productAddedInCart);
-        cartRepository.saveAndFlush(cartOptional.get());
-        return cartOptional.get();
+        Cart cart = cartRepository.findById(cartId).get();
+        productRepository.getById(productId);
+        for (Order o : cart.getOrders()) {
+            productId.equals(o.getProduct().getId());
+            o.setAmount(o.getAmount() + amount);
+            updateCart(cart);
+        }
+        Product product = productRepository.getById(productId);
+        Order order = new Order();
+        order.setProduct(product);
+        order.setAmount(amount);
+        cart.getOrders().add(order);
+        return updateCart(cart);
     }
 
+
+//        Order order = new Order();
+//        order.setProduct(productRepository.getById(productId));
+//        order.setAmount(amount);
+//        orderRepository.save(order);
+//
+//        Optional<Cart> cartOptional = cartRepository.findById(cartId);
+//        cartOptional.get().addOrderToCart(order);
+//        cartRepository.saveAndFlush(cartOptional.get());
+//        return cartOptional.get();
+
+
+
+private Cart updateCart(Cart cart){
+    BigDecimal bigDecimalSum = countSum(cart);
+    cart.setSum(bigDecimalSum);
+    return cartRepository.save(cart);
+}
     @Override
-    public Cart deleteProductFromCart(Long cartId, Long productId) throws IOException {
+    public Cart deleteOrderFromCart(Long cartId, Long productId) throws IOException {
         if (!cartRepository.existsById(cartId)) {
             throw new IOException("Cart with id " + cartId + " does not exists");
         }
@@ -96,9 +113,9 @@ public class CartServiceImpl implements CartService {
             throw new IOException("Required parameters: productId");
         }
         Cart cart = cartRepository.getById(cartId);
-        for (ProductAddedInCart p : cart.getProductsAddedInCart()) {
+        for (Order p : cart.getOrders()) {
             if (p.getProduct().getId().equals(productId)) {
-                productAddedInCartRepository.delete(p);
+                orderRepository.delete(p);
                 break;
             }
         }
@@ -112,14 +129,27 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<Cart> getAllCartsBySum(BigDecimal sum) {
-        for (Cart c : carts) {
-            if (c.countSum().compareTo(sum) < 0) {
-                return null;
-            }
+    public BigDecimal countSum(Cart cart) {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (Order o : cart.getOrders()) {
+            sum = sum.add(o.getProduct().getPrice().multiply(BigDecimal.valueOf(o.getAmount())));
         }
-        return cartRepository.findAllCartsBySum(sum);
+        cart.setSum(sum);
+        return sum;
     }
+
+
+
+
+//    @Override
+//    public List<Cart> getAllCartsBySum(BigDecimal sum) {
+//        for (Cart c : carts) {
+//            if (c.countSum().compareTo(sum) < 0) {
+//                return null;
+//            }
+//        }
+//        return cartRepository.findAllCartsBySum(sum);
+//    }
 
 }
 

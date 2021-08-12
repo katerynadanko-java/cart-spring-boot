@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
-    List<Cart> findAllCartsByCustomerId(Long customerId);
 
-    List<Cart> findAllCartsBySum(BigDecimal sum);
+//    List<Cart> findAllCartsByCustomerId(Long customerId);
+
+//    List<Cart> findAllCartsBySum(BigDecimal sum);
 }

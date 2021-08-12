@@ -39,12 +39,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updatePrice(Long productId, BigDecimal cost) throws IOException {
+    public Product updatePrice(Long productId, BigDecimal price) throws IOException {
         Optional<Product> productRepositoryById = productRepository.findById(productId);
-        if (cost.compareTo(new BigDecimal(0)) < 0) {
+        if (price.compareTo(new BigDecimal(0)) < 0) {
             throw new IOException("Product should not cost less then 0");
         }
-        productRepositoryById.get().setCost(cost);
+        productRepositoryById.get().setPrice(price);
         return productRepositoryById.get();
     }
 
@@ -53,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
         if (cost.compareTo(new BigDecimal(0)) < 0) {
             throw new IOException("Product should cost more then 0");
         }
-        return productRepository.findAllProductsByCost(cost);
+        return productRepository.findAllProductsByPrice(cost);
     }
 
     @Override
