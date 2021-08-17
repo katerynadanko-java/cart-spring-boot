@@ -34,8 +34,8 @@ public class Product {
     @Column(name = "price")
     private BigDecimal price;
 
-//    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-//    private List<Order> orders;
+    @OneToMany(mappedBy = "product", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Order> orders;
 
     @Override
     public boolean equals(Object o) {

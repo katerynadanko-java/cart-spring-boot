@@ -14,8 +14,4 @@ public interface CustomerService {
 
     String deleteCustomer(Long id);
 
-    List<Customer> findByPhone(String phone) throws IOException;
-
-    List<Customer> findByEmail(String email) throws IOException;
-
 }

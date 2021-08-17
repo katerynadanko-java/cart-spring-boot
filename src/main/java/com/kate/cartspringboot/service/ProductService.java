@@ -17,9 +17,6 @@ public interface ProductService {
 
     Product updatePrice(Long productId, BigDecimal cost) throws IOException;
 
-    List<Product> findProductsByCost(BigDecimal cost) throws IOException;
-
-    List<Product> findProductsByName(String name) throws IOException;
 
 
 }

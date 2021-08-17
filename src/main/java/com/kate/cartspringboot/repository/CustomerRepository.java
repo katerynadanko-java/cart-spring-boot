@@ -10,9 +10,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> findById(Long id);
 
-    List<Customer> findCustomerByPhone(String phone);
-
-    List<Customer> findCustomerByEmail(String email);
 
 
 }

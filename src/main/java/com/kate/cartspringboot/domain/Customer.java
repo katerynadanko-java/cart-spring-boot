@@ -14,6 +14,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
@@ -23,7 +26,7 @@ import javax.persistence.Table;
 @Table(name = "customers")
 public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "customer_id")
     private Long id;
     @Column(name = "name", nullable = false)
@@ -32,11 +35,11 @@ public class Customer {
     private String surname;
     @Column(name = "phone", nullable = false, unique = true)
     private String phone;
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    @Column(name = "email", nullable = false)
+    private String password;
 
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true, fetch = FetchType.LAZY)
     private Cart cart;
 
     @Override
@@ -46,7 +49,7 @@ public class Customer {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", cart=" + cart +
                 '}';
     }

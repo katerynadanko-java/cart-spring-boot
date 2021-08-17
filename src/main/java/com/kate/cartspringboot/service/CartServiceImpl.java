@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,8 +32,6 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private OrderRepository orderRepository;
-
-    private Cart cart;
 
     @Override
     public Cart createCart(Long customerId) throws IOException {
@@ -85,20 +84,7 @@ public class CartServiceImpl implements CartService {
         cart.getOrders().add(order);
         return updateCart(cart);
     }
-
-
-//        Order order = new Order();
-//        order.setProduct(productRepository.getById(productId));
-//        order.setAmount(amount);
-//        orderRepository.save(order);
 //
-//        Optional<Cart> cartOptional = cartRepository.findById(cartId);
-//        cartOptional.get().addOrderToCart(order);
-//        cartRepository.saveAndFlush(cartOptional.get());
-//        return cartOptional.get();
-
-
-
 private Cart updateCart(Cart cart){
     BigDecimal bigDecimalSum = countSum(cart);
     cart.setSum(bigDecimalSum);
@@ -113,9 +99,9 @@ private Cart updateCart(Cart cart){
             throw new IOException("Required parameters: productId");
         }
         Cart cart = cartRepository.getById(cartId);
-        for (Order p : cart.getOrders()) {
-            if (p.getProduct().getId().equals(productId)) {
-                orderRepository.delete(p);
+        for (Order o : cart.getOrders()) {
+            if (productId.equals(o.getProduct().getId())) {
+                orderRepository.delete(o);
                 break;
             }
         }
@@ -128,7 +114,7 @@ private Cart updateCart(Cart cart){
         return "Cart with id " + cartId + " deleted successfully";
     }
 
-    @Override
+
     public BigDecimal countSum(Cart cart) {
         BigDecimal sum = BigDecimal.ZERO;
         for (Order o : cart.getOrders()) {
@@ -137,19 +123,6 @@ private Cart updateCart(Cart cart){
         cart.setSum(sum);
         return sum;
     }
-
-
-
-
-//    @Override
-//    public List<Cart> getAllCartsBySum(BigDecimal sum) {
-//        for (Cart c : carts) {
-//            if (c.countSum().compareTo(sum) < 0) {
-//                return null;
-//            }
-//        }
-//        return cartRepository.findAllCartsBySum(sum);
-//    }
 
 }
 

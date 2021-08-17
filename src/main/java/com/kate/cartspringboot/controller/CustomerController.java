@@ -51,16 +51,4 @@ public class CustomerController {
         String deletedCustomer = customerService.deleteCustomer(customerId);
         return deletedCustomer;
     }
-
-    @GetMapping("getByPhone/{phone}")
-    public ResponseEntity<List<Customer>> findByPhone(@PathVariable String phone) throws IOException {
-        log.debug("Start to find customer with phone", phone);
-        return ResponseEntity.ok(customerService.findByPhone(phone));
-    }
-
-    @GetMapping("getByEmail/{email}")
-    public ResponseEntity<List<Customer>> findByEmail(@PathVariable String email) throws IOException {
-        log.debug("Start to find customer with email", email);
-        return ResponseEntity.ok(customerService.findByEmail(email));
-    }
 }

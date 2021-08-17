@@ -47,21 +47,4 @@ public class ProductServiceImpl implements ProductService {
         productRepositoryById.get().setPrice(price);
         return productRepositoryById.get();
     }
-
-    @Override
-    public List<Product> findProductsByCost(BigDecimal cost) throws IOException {
-        if (cost.compareTo(new BigDecimal(0)) < 0) {
-            throw new IOException("Product should cost more then 0");
-        }
-        return productRepository.findAllProductsByPrice(cost);
-    }
-
-    @Override
-    public List<Product> findProductsByName(String name) throws IOException {
-
-        if (name == null && name.isEmpty()) {
-            throw new IOException("Required parameters: productName");
-        }
-        return productRepository.findAllProductsByName(name);
-    }
 }

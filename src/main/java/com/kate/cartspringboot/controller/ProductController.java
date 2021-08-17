@@ -63,16 +63,5 @@ public class ProductController {
         return "Product with id " + String.valueOf(productId) + " deleted successfully";
     }
 
-    @GetMapping(value = "/findByCost/{cost}")
-    public ResponseEntity<List<Product>> findById(@PathVariable BigDecimal cost) throws IOException {
-        log.debug("Start to find product with cost ", cost);
-        return ResponseEntity.ok(productService.findProductsByCost(cost));
-    }
-
-    @GetMapping(value = "/findByName/{name}")
-    public ResponseEntity<List<Product>> findByName(@PathVariable String name) throws IOException {
-        log.debug("Start to find product with name ", name);
-        return ResponseEntity.ok(productService.findProductsByName(name));
-    }
 
 }

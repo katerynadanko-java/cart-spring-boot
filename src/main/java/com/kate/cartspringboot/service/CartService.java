@@ -3,12 +3,11 @@ package com.kate.cartspringboot.service;
 import com.kate.cartspringboot.domain.Cart;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface CartService {
-    Cart createCart(Long customerId) throws IOException;
 
+    Cart createCart(Long customerId) throws IOException;
 
     List<Cart> getAllCarts();
 
@@ -16,9 +15,6 @@ public interface CartService {
 
     Cart deleteOrderFromCart(Long cartId, Long productId) throws IOException;
 
-    String deleteCartById(Long cartId) throws IOException;
+    String deleteCartById(Long cartId);
 
-    BigDecimal countSum(Cart cart);
-
-//    List<Cart> getAllCartsBySum(BigDecimal sum);
 }

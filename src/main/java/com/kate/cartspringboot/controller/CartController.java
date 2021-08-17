@@ -32,12 +32,6 @@ public class CartController {
         return ResponseEntity.ok(cartService.createCart(customerId));
     }
 
-//    @GetMapping("getByCustomerId/{customerId}")
-//    public ResponseEntity<List<Cart>> getCartsByCustomerId(@PathVariable Long customerId) throws IOException {
-//        log.debug("Start to find carts with customerId ", customerId);
-//        return ResponseEntity.ok(cartService.getAllCartsByCustomerId(customerId));
-//    }
-
     @GetMapping("get")
     public ResponseEntity<List<Cart>> getAllCarts() {
         log.debug("Start to find carts");
@@ -63,9 +57,4 @@ public class CartController {
         return deletedCart;
     }
 
-//    @GetMapping("/getPremium/{sum}")
-//    public ResponseEntity<List<Cart>> getPremiumCart(@PathVariable BigDecimal sum) {
-//        log.debug("Start to find premiumCarts with sum ", sum);
-//        return ResponseEntity.ok(cartService.getAllCartsBySum(sum));
-//    }
 }

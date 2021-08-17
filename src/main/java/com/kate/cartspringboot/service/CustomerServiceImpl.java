@@ -53,30 +53,4 @@ public class CustomerServiceImpl implements CustomerService {
         return "Customer with id " + customerId + " deleted successfully";
     }
 
-    @Override
-    public List<Customer> findByPhone(String phone) throws IOException {
-
-        if (phone == null && phone.isEmpty()) {
-            throw new IOException("Required parameters: customerPhone");
-        }
-        for (Customer c : customers) {
-            if (!phone.equals(c.getPhone())) {
-                throw new IOException("Customer with phone " + phone + " does not exist");
-            }
-        }
-        return customerRepository.findCustomerByPhone(phone);
-    }
-
-    @Override
-    public List<Customer> findByEmail(String email) throws IOException {
-        if (email == null && email.isEmpty()) {
-            throw new IOException("Required parameters: customerEmail");
-        }
-        for (Customer c : customers) {
-            if (!email.equals(c.getEmail())) {
-                throw new IOException("Customer with phone " + email + " does not exist");
-            }
-        }
-        return customerRepository.findCustomerByEmail(email);
-    }
 }

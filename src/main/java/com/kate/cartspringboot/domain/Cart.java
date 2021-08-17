@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,11 +34,11 @@ public class Cart {
     @Column(name = "sum")
     private BigDecimal sum = BigDecimal.ZERO;;
 
-//    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "customer_id")
-//    private Customer customer;
+    @OneToOne(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Customer customer;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+//    , fetch = FetchType.EAGER)
     private List<Order> orders;
 
     @Override
@@ -45,7 +46,7 @@ public class Cart {
         return "Cart{" +
                 "id=" + id +
                 ", sum=" + sum +
-//                ", customer=" + customer +
+                ", customer=" + customer +
                 ", orders=" + orders +
                 '}';
     }
