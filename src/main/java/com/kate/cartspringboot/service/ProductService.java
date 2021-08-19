@@ -11,7 +11,7 @@ public interface ProductService {
 
     List<Product> getAll();
 
-    String createProduct(Product product) throws IOException;
+    Product createProduct(Product product);
 
     String deleteById(Long id);
 

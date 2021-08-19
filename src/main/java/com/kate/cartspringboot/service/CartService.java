@@ -11,10 +11,12 @@ public interface CartService {
 
     List<Cart> getAllCarts();
 
-    Cart addOrderToCart(Long cartId, Long productId, Integer amount) throws IOException;
+    Cart addProductsToCart(Long cartId, Long productId, Integer amount);
 
-    Cart deleteOrderFromCart(Long cartId, Long productId) throws IOException;
+    Cart updateProductsFromCart(Long cartId, Long productId, Integer amount) throws IOException;
 
-    String deleteCartById(Long cartId);
+    Cart deleteProductFromCart(Long cartId, Long productId) throws IOException;
+
+    Cart deleteAllProductsFromCart(Long cartId);
 
 }

@@ -41,20 +41,24 @@ public class CartController {
     @PutMapping("/{cartId}/add/product/{productId}/{amount}")
     public ResponseEntity<Cart> addProductToCart(@PathVariable Long cartId, @PathVariable Long productId, @PathVariable Integer amount) throws IOException {
         log.debug("Start to add product with id ", productId, "to customer with id", cartId);
-        return ResponseEntity.ok(cartService.addOrderToCart(cartId, productId, amount));
+        return ResponseEntity.ok(cartService.addProductsToCart(cartId, productId, amount));
+    }
+
+    @PutMapping("/{cartId}/update/product/{productId}/{amount}")
+    public ResponseEntity<Cart> deleteProductToCart(@PathVariable Long cartId, @PathVariable Long productId, @PathVariable Integer amount) throws IOException {
+        log.debug("Start to delete product with id ", productId);
+        return ResponseEntity.ok(cartService.updateProductsFromCart(cartId, productId, amount));
     }
 
     @DeleteMapping("/{cartId}/delete/product/{productId}")
     public ResponseEntity<Cart> deleteProductToCart(@PathVariable Long cartId, @PathVariable Long productId) throws IOException {
         log.debug("Start to delete product with id ", productId);
-        return ResponseEntity.ok(cartService.deleteOrderFromCart(cartId, productId));
+        return ResponseEntity.ok(cartService.deleteProductFromCart(cartId, productId));
     }
 
-    @DeleteMapping("/delete/{cartId}")
-    public String deleteCart(@PathVariable Long cartId) throws IOException {
-        log.debug("Start to delete cart with id ", cartId);
-        String deletedCart = cartService.deleteCartById(cartId);
-        return deletedCart;
+    @DeleteMapping("/{cartId}/delete/products")
+    public ResponseEntity<Cart> deleteProductToCart(@PathVariable Long cartId) throws IOException {
+        log.debug("Start to delete product with id ");
+        return ResponseEntity.ok(cartService.deleteAllProductsFromCart(cartId));
     }
-
 }

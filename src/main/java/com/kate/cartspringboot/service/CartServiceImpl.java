@@ -2,11 +2,9 @@ package com.kate.cartspringboot.service;
 
 import com.kate.cartspringboot.domain.Cart;
 import com.kate.cartspringboot.domain.Customer;
-import com.kate.cartspringboot.domain.Order;
 import com.kate.cartspringboot.domain.Product;
 import com.kate.cartspringboot.repository.CartRepository;
 import com.kate.cartspringboot.repository.CustomerRepository;
-import com.kate.cartspringboot.repository.OrderRepository;
 import com.kate.cartspringboot.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +13,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -29,9 +26,8 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
+    List<Product> products = new ArrayList<>();
+    List<Cart> carts = new ArrayList<>();
 
     @Override
     public Cart createCart(Long customerId) throws IOException {
@@ -40,12 +36,13 @@ public class CartServiceImpl implements CartService {
             throw new IOException("Person with id " + customerId + " does not exists.");
         }
         Cart cart = new Cart();
+        Customer customer = customerRepository.findById(customerId).get();
         Cart savedCart = cartRepository.save(cart);
-        Optional<Customer> customerOptional = customerRepository.findById(customerId);
-        Customer customer = customerOptional.get();
-        customer.setCart(savedCart);
+        carts.add(cart);
+
+        customer.setCarts(carts);
         customerRepository.save(customer);
-        return cart;
+        return savedCart;
     }
 
     @Override
@@ -53,45 +50,22 @@ public class CartServiceImpl implements CartService {
         return cartRepository.findAll();
     }
 
-
     @Override
-    public Cart addOrderToCart(Long cartId, Long productId, Integer amount) throws IOException {
+    public Cart addProductsToCart(Long cartId, Long productId, Integer amount) {
 
-//        if (!cartRepository.existsById(cartId)) {
-//            throw new IOException("Cart with id " + cartId + " does not exists");
-//        }
-//        if (productId == null || amount == null) {
-//            throw new IOException("Required parameters: productId, quantity");
-//        }
-//        if (!productRepository.existsById(productId)) {
-//            throw new IOException("Product with id " + productId + " does not exists");
-//        }
-//        if (amount < 1) {
-//            throw new IOException("Amount of products should be more than 1!");
-//        }
-
-        Cart cart = cartRepository.findById(cartId).get();
-        productRepository.getById(productId);
-        for (Order o : cart.getOrders()) {
-            productId.equals(o.getProduct().getId());
-            o.setAmount(o.getAmount() + amount);
-            updateCart(cart);
-        }
         Product product = productRepository.getById(productId);
-        Order order = new Order();
-        order.setProduct(product);
-        order.setAmount(amount);
-        cart.getOrders().add(order);
-        return updateCart(cart);
+        Optional<Cart> cartOptional = cartRepository.findById(cartId);
+        Cart cart = cartOptional.get();
+        product.setAmount(amount);
+        products.add(product);
+        cart.setProducts(products);
+        BigDecimal bigDecimalSum = countSum(cart);
+        cart.setSum(bigDecimalSum);
+        return cartRepository.save(cart);
     }
-//
-private Cart updateCart(Cart cart){
-    BigDecimal bigDecimalSum = countSum(cart);
-    cart.setSum(bigDecimalSum);
-    return cartRepository.save(cart);
-}
+
     @Override
-    public Cart deleteOrderFromCart(Long cartId, Long productId) throws IOException {
+    public Cart updateProductsFromCart(Long cartId, Long productId, Integer amount) throws IOException {
         if (!cartRepository.existsById(cartId)) {
             throw new IOException("Cart with id " + cartId + " does not exists");
         }
@@ -99,26 +73,52 @@ private Cart updateCart(Cart cart){
             throw new IOException("Required parameters: productId");
         }
         Cart cart = cartRepository.getById(cartId);
-        for (Order o : cart.getOrders()) {
-            if (productId.equals(o.getProduct().getId())) {
-                orderRepository.delete(o);
+        for (Product p : cart.getProducts()) {
+            if (productId.equals(p.getId())) {
+                p.setAmount(amount);
+                BigDecimal bigDecimalSum = countSum(cart);
+                cart.setSum(bigDecimalSum);
+                cartRepository.save(cart);
                 break;
             }
         }
-        return cart;
+        return cartRepository.save(cart);
     }
 
     @Override
-    public String deleteCartById(Long cartId) {
-        cartRepository.deleteById(cartId);
-        return "Cart with id " + cartId + " deleted successfully";
+    public Cart deleteProductFromCart(Long cartId, Long productId) throws IOException {
+        if (!cartRepository.existsById(cartId)) {
+            throw new IOException("Cart with id " + cartId + " does not exists");
+        }
+        if (productId == null) {
+            throw new IOException("Required parameters: productId");
+        }
+        Cart cart = cartRepository.getById(cartId);
+        for (Product p : cart.getProducts()) {
+            if (productId.equals(p.getId())) {
+                p.setAmount((p.getAmount()) - 1);
+                BigDecimal bigDecimalSum = countSum(cart);
+                cart.setSum(bigDecimalSum);
+                cartRepository.save(cart);
+                break;
+            }
+        }
+        return cartRepository.save(cart);
     }
 
+    @Override
+    public Cart deleteAllProductsFromCart(Long cartId) {
+        Cart cart = cartRepository.getById(cartId);
+        cart.getProducts().clear();
+        BigDecimal bigDecimalSum = BigDecimal.ZERO;
+        cart.setSum(bigDecimalSum);
+        return cartRepository.save(cart);
+    }
 
     public BigDecimal countSum(Cart cart) {
         BigDecimal sum = BigDecimal.ZERO;
-        for (Order o : cart.getOrders()) {
-            sum = sum.add(o.getProduct().getPrice().multiply(BigDecimal.valueOf(o.getAmount())));
+        for (Product p : cart.getProducts()) {
+            sum = sum.add(p.getPrice().multiply(BigDecimal.valueOf(p.getAmount())));
         }
         cart.setSum(sum);
         return sum;

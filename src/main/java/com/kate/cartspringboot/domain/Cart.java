@@ -1,8 +1,11 @@
 package com.kate.cartspringboot.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,16 +14,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 
 @Entity
@@ -32,22 +31,7 @@ public class Cart {
     private Long id;
 
     @Column(name = "sum")
-    private BigDecimal sum = BigDecimal.ZERO;;
-
-    @OneToOne(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Customer customer;
-
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-//    , fetch = FetchType.EAGER)
-    private List<Order> orders;
-
-    @Override
-    public String toString() {
-        return "Cart{" +
-                "id=" + id +
-                ", sum=" + sum +
-                ", customer=" + customer +
-                ", orders=" + orders +
-                '}';
-    }
+    private BigDecimal sum = BigDecimal.ZERO;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Product> products;
 }

@@ -39,10 +39,10 @@ public class ProductController {
 
     @Transactional
     @PostMapping(value = "/create")
-    public String createProduct(@RequestBody Product product) throws IOException {
+    public ResponseEntity <Product> createProduct(@RequestBody Product product) {
         log.debug("Start to create product ", product);
-        String createProduct = productService.createProduct(product);
-        return createProduct;
+        productService.createProduct(product);
+        return ResponseEntity.ok(product);
     }
 
     @PutMapping("update/{productId}/{cost}")
