@@ -15,7 +15,7 @@ public interface ProductService {
 
     String deleteById(Long id);
 
-    Product updatePrice(Long productId, BigDecimal cost) throws IOException;
+    Product updatePrice(Long productId, BigDecimal cost);
 
 
 

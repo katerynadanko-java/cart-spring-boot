@@ -18,7 +18,6 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-
 @Entity
 @Table(name = "customers")
 public class Customer {
@@ -26,13 +25,15 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "customer_id")
     private Long id;
-    @Column(name = "name", nullable = false)
-    private String name;
-    @Column(name = "surname", nullable = false)
-    private String surname;
+    @Column(name = "user_name")
+    private String userName;
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
     @Column(name = "phone", nullable = false, unique = true)
     private String phone;
-    @Column(name = "email", nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Cart> carts;

@@ -1,11 +1,12 @@
-package com.kate.cartspringboot.service;
+package com.kate.cartspringboot.service.impl;
 
 import com.kate.cartspringboot.domain.Product;
+import com.kate.cartspringboot.dto.ProductDTO;
 import com.kate.cartspringboot.repository.ProductRepository;
+import com.kate.cartspringboot.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -39,12 +40,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updatePrice(Long productId, BigDecimal price) throws IOException {
+    public Product updatePrice(Long productId, BigDecimal price) {
         Optional<Product> productRepositoryById = productRepository.findById(productId);
         if (price.compareTo(new BigDecimal(0)) < 0) {
-            throw new IOException("Product should not cost less then 0");
+            throw new RuntimeException("Product should not cost less then 0");
         }
         productRepositoryById.get().setPrice(price);
         return productRepositoryById.get();
+    }
+
+    private static ProductDTO convertToProductDto(Product product) {
+        ProductDTO newProduct = new ProductDTO();
+        newProduct.setId(product.getId());
+        newProduct.setName(product.getName());
+        newProduct.setPrice(product.getPrice());
+        return newProduct;
+    }
+
+    private static Product convertToProduct(ProductDTO productDto) {
+        Product newProduct = new Product();
+        newProduct.setId(productDto.getId());
+        newProduct.setName(productDto.getName());
+        newProduct.setPrice(productDto.getPrice());
+        return newProduct;
     }
 }

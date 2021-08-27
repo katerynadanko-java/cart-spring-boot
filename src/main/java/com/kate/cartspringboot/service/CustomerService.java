@@ -1,17 +1,18 @@
 package com.kate.cartspringboot.service;
 
 import com.kate.cartspringboot.domain.Customer;
+import com.kate.cartspringboot.dto.CustomerDTO;
 
 import java.io.IOException;
 import java.util.List;
 
 public interface CustomerService {
-    void createCustomer(Customer customer);
+    void createOrUpdateCustomer(Customer customer);
 
-    List<Customer> getAllCustomers();
+    List<CustomerDTO> getAllCustomers();
 
-    Customer updateCustomer(Long id, String name, String surname) throws IOException;
+    void deleteCustomer(Long id);
 
-    String deleteCustomer(Long id);
+    CustomerDTO editCustomer(Long id);
 
 }

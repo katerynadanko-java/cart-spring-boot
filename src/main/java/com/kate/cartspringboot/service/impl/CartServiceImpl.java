@@ -1,11 +1,13 @@
-package com.kate.cartspringboot.service;
+package com.kate.cartspringboot.service.impl;
 
 import com.kate.cartspringboot.domain.Cart;
 import com.kate.cartspringboot.domain.Customer;
 import com.kate.cartspringboot.domain.Product;
+import com.kate.cartspringboot.dto.CartDTO;
 import com.kate.cartspringboot.repository.CartRepository;
 import com.kate.cartspringboot.repository.CustomerRepository;
 import com.kate.cartspringboot.repository.ProductRepository;
+import com.kate.cartspringboot.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -122,6 +124,22 @@ public class CartServiceImpl implements CartService {
         }
         cart.setSum(sum);
         return sum;
+    }
+
+    private static CartDTO convertToCartDto(Cart cart) {
+        CartDTO newCart = new CartDTO();
+        newCart.setId(cart.getId());
+        newCart.setProducts(cart.getProducts());
+        newCart.setSum(cart.getSum());
+        return newCart;
+    }
+
+    private static Cart convertToCart(CartDTO cartDto) {
+        Cart newCart = new Cart();
+        newCart.setSum(cartDto.getSum());
+        newCart.setId(cartDto.getId());
+        newCart.setProducts(cartDto.getProducts());
+        return newCart;
     }
 
 }
